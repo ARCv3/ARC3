@@ -12,6 +12,7 @@
     <PackageReference Include="dotenv.net" Version="3.2.1" />
     <PackageReference Include="microsoft.extensions.dependencyinjection" Version="9.0.0-rc.2.24473.5" />
     <PackageReference Include="Mongodb.Driver" Version="2.29.0" />
+    <PackageReference Include="UptimeKumaAPI" Version="1.0.0" />
   </ItemGroup>
 
 </Project>
