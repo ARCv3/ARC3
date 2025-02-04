@@ -1,8 +1,6 @@
-using System.Threading.Channels;
 using Arc3.Core.Ext;
 using Arc3.Core.Services;
 using Discord;
-using Discord.Rest;
 using Discord.Webhook;
 using Discord.WebSocket;
 
@@ -61,7 +59,7 @@ public static class ModMailExt
         
 
         // Send the message
-        if (!string.IsNullOrWhiteSpace(msg.Content))
+        if (!string.IsNullOrWhiteSpace(msg.Content) && msg.Attachments.Count < 0)
         {
             try
             {
@@ -90,29 +88,34 @@ public static class ModMailExt
         // Share attachments
         if (msg.Attachments.Count > 0)
         {
+
+            var attCount = 0;
+
             foreach (var attachment in msg.Attachments)
             {
                 var emb = new EmbedBuilder()
                     .WithModMailStyle(clientInstance)
                     .WithAuthor(msg.Author.Username, msg.Author.GetDisplayAvatarUrl())
-                    .WithDescription("You recieved an image")
-                    .WithImageUrl(attachment.ProxyUrl)
+                    .WithDescription(string.IsNullOrWhiteSpace(msg.Content)? "Image: " : attCount == 0? msg.Content : "Image: ")
+                    .WithImageUrl(attachment.Url)
                     .Build();
                 
                 try
                 {
                     var user = await self.GetUser(clientInstance);
-                    await user.SendMessageAsync(embed: embed);
+                    await user.SendMessageAsync(embed: emb);
                 }
                 catch (Exception ex)
                 {
                     await msg.AddReactionAsync(new Emoji("🔴"));
+                    await msg.RemoveReactionAsync(new Emoji("📤"), clientInstance.CurrentUser);
                 }
                 finally
                 {
-               
                     await msg.AddReactionAsync(new Emoji("📨"));
+                    await msg.RemoveReactionAsync(new Emoji("📤"), clientInstance.CurrentUser);
                 }
+                attCount++;
             }
         }
         
@@ -138,11 +141,30 @@ public static class ModMailExt
         
     }
 
+    public static async Task SendModsAttachment(this ModMail self, Attachment attachment, DiscordSocketClient clientInstance, SocketMessage msg)
+    {
+        DiscordWebhookClient client = new DiscordWebhookClient(await self.GetWebhook(clientInstance));
+        await client.SendMessageAsync(attachment.ProxyUrl, avatarUrl: msg.Author.GetDisplayAvatarUrl());
+    }
+
     public static async Task SendMods(this ModMail self, SocketMessage msg, DiscordSocketClient clientInstance, DbService dbService, bool edit = false)
     {
    
-
         DiscordWebhookClient client = new DiscordWebhookClient(await self.GetWebhook(clientInstance));
+
+        // First, check if there are attachements on the message
+        if (msg.Attachments.Count > 0 && !edit)
+        {
+            // Send attachements
+            foreach (var attachment in msg.Attachments)
+            {
+                await self.SendModsAttachment(attachment, clientInstance, msg);
+            }
+
+            if (msg.Content == "")
+                return;
+
+        }
 
         await client.SendMessageAsync(edit? "EDIT: " + msg.CleanContent : msg.CleanContent, avatarUrl: msg.Author.GetDisplayAvatarUrl());
         
@@ -164,16 +186,7 @@ public static class ModMailExt
 
             await dbService.AddTranscriptAsync(transcript);
             
-            if (msg.Attachments.Count > 0)
-            {
-                foreach (var att in msg.Attachments)
-                {
-                    await client.SendMessageAsync(att.ProxyUrl, avatarUrl: msg.Author.GetDisplayAvatarUrl());
-                }
-            }
-            
         }
-        
         
         
     }
