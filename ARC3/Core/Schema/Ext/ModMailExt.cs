@@ -41,20 +41,7 @@ public static class ModMailExt
 
         if (!edit)
         {
-            var transcript = new Transcript
-            {
-                Id = msg.Id.ToString(),
-                ModMailId = self.Id,
-                SenderSnowfake = (long)msg.Author.Id,
-                AttachmentURls = msg.Attachments.Select(x => x.ProxyUrl).ToArray(),
-                CreatedAt = msg.CreatedAt.UtcDateTime,
-                GuildSnowflake = (long)channel.Guild.Id,
-                MessageContent = msg.Content,
-                TranscriptType = "Modmail"
-            };
-
-            await dbService.AddTranscriptAsync(transcript);
-
+            await SaveTranscript(self, msg, dbService, channel, "Modmail");
         }
         
         var attLen = msg.Attachments.Count;
@@ -175,23 +162,27 @@ public static class ModMailExt
 
         if (!edit)
         {
-            var transcript = new Transcript
-            {
-                Id = msg.Id.ToString(),
-                ModMailId = self.Id,
-                SenderSnowfake = (long)msg.Author.Id,
-                AttachmentURls = msg.Attachments.Select(x => x.ProxyUrl).ToArray(),
-                CreatedAt = msg.CreatedAt.UtcDateTime,
-                GuildSnowflake = (long)channel.Guild.Id,
-                MessageContent = msg.Content,
-                TranscriptType = "Modmail"
-            };
-
-            await dbService.AddTranscriptAsync(transcript);
-            
+            await SaveTranscript(self, msg, dbService, channel, "Modmail");
         }
-        
-        
+
+
+    }
+
+    private static async Task SaveTranscript(ModMail self, SocketMessage msg, DbService dbService, ITextChannel channel, String type)
+    {
+        var transcript = new Transcript
+        {
+            Id = msg.Id.ToString(),
+            ModMailId = self.Id,
+            SenderSnowfake = (long)msg.Author.Id,
+            AttachmentURls = msg.Attachments.Select(x => x.ProxyUrl).ToArray(),
+            CreatedAt = msg.CreatedAt.UtcDateTime,
+            GuildSnowflake = (long)channel.Guild.Id,
+            MessageContent = msg.Content,
+            TranscriptType = type
+        };
+
+        await dbService.AddTranscriptAsync(transcript);
     }
 
     public static async Task SendModMailMenu(this ModMail self, DiscordSocketClient clientInstance, Appeal? appeal = null)
