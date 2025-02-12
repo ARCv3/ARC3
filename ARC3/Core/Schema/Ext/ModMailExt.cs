@@ -163,7 +163,9 @@ public static class ModMailExt
             }
 
             if (msg.Content == "")
+            {
                 return;
+            }
 
         }
 
