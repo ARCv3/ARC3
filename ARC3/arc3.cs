@@ -6,10 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Discord;
 using System.Reflection;
 using Arc3.Core.Services;
-using arc3.Core.Services;
-using System.Diagnostics;
 using Arc3.Core.Schema;
-using System.ComponentModel;
 
 using MongoDB.Bson;
 
