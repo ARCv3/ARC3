@@ -230,8 +230,9 @@ public class ModMailService : ArcService
 
     private async Task HandleMessageEditFromMod(SocketMessage arg2)
     {
-        if (!_activeChannelCache.Contains((long)arg2.Channel.Id))
+        if (!_activeChannelCache.Contains((long)arg2.Channel.Id)) {
             return;
+        }
 
         // Quit if the message is from a bot
         if (arg2.Author.IsBot)
@@ -310,8 +311,9 @@ public class ModMailService : ArcService
         if (arg.Channel.GetChannelType() != ChannelType.DM)
         {
 
-            if (!_activeChannelCache.Contains((long)arg.Channel.Id))
+            if (!_activeChannelCache.Contains((long)arg.Channel.Id)) {
                 return;
+            }
 
             await GatherModmailInsights(arg);
 
