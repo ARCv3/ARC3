@@ -1,0 +1,38 @@
+name: dotnet package
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    permissions:
+      pull-requests: write
+      contents: read
+      
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: [ '8.0.x' ]
+    
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Dotnet ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with: 
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Install Deps
+        run: dotnet restore
+      - name: Build
+        run: dotnet build
+      - name: Test
+        run: dotnet test --collect:"XPlat Code Coverage;Format=json,lcov,cobertura" --results-directory:"Results"
+      - name: Coverage
+        uses: 5monkeys/cobertura-action@master
+        with:
+          path: Results/*/coverage.cobertura.xml
+          minimum_coverage: 80
