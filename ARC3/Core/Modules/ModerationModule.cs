@@ -9,7 +9,6 @@ using Discord;
 using Discord.Interactions;
 using Discord.Net;
 using Discord.WebSocket;
-using MongoDB.Bson;
 
 namespace Arc3.Core.Modules;
 
@@ -20,6 +19,7 @@ public class ModerationModule : ArcModule
   public DbService DbService { get; set; }
   public InteractionService  InteractionService{ get; set; }
   public PaginationService PaginationService { get; set; }
+
   public ModerationModule(DiscordSocketClient clientInstance) : base(clientInstance, "Moderation") {
 
   }
@@ -255,7 +255,6 @@ public class ModerationModule : ArcModule
 
   }
 
-  
   [UserCommand("Unjail User"), 
    SlashCommand("unjail", "Take a user out of jail"),
    RequireUserPermission(GuildPermission.MuteMembers),
@@ -337,7 +336,6 @@ public class ModerationModule : ArcModule
     await Context.Interaction.RespondAsync(embed:embed.Build());
 
   }
-
 
   [SlashCommand("dispose", "Dispose a modmail channel"),
   RequireUserPermission(GuildPermission.ManageChannels),
