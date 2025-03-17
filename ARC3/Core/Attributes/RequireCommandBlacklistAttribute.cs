@@ -6,13 +6,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Arc3.Core.Attributes;
 
-[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+// ReSharper disable once RedundantAttributeUsageProperty
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false)]
 public class RequireCommandBlacklistAttribute : PreconditionAttribute
 {
-
-    public RequireCommandBlacklistAttribute()
-    {
-    }
 
     public override async Task<PreconditionResult> CheckRequirementsAsync(
         IInteractionContext context,
@@ -25,7 +22,14 @@ public class RequireCommandBlacklistAttribute : PreconditionAttribute
 
         var cmd = commandInfo.Name.ToLower();
 
-        if (blacklists.Any(x => (x.GuildSnowflake == ((long)context.Guild.Id) || x.GuildSnowflake == 0) && x.UserSnowflake == ((long)context.User.Id) && (x.Command == "all" || x.Command == cmd))) {
+        bool conditionCheck = blacklists.Any(
+            blacklist =>
+                MatchCurrentGuild(blacklist, context) &&
+                MatchCurrentUser(blacklist, context) &&
+                MatchCurrentCommand(blacklist, cmd)
+        );
+
+        if ( conditionCheck ) {
             await context.Interaction.RespondAsync("You are blacklisted from using this command.");
             return PreconditionResult.FromError(new Exception("Blacklisted"));
         }
@@ -33,4 +37,11 @@ public class RequireCommandBlacklistAttribute : PreconditionAttribute
         return PreconditionResult.FromSuccess();
   
     }
+
+    private static bool MatchCurrentGuild(Blacklist x, IInteractionContext context) => x.GuildSnowflake == (long)context.Guild.Id || x.GuildSnowflake == 0;
+
+    private static bool MatchCurrentUser(Blacklist x, IInteractionContext context) => x.UserSnowflake == (long)context.User.Id;
+
+    private static bool MatchCurrentCommand(Blacklist x, String cmd) => x.Command == "all" || x.Command == cmd;
+
 }
