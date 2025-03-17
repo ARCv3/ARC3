@@ -6,14 +6,14 @@ namespace Arc3.Core.Services;
 public abstract class ArcService 
 {
   
-  protected readonly DiscordSocketClient _clientInstance;
-  protected readonly InteractionService _interactionService;
+  protected readonly DiscordSocketClient ClientInstance;
+  protected readonly InteractionService InteractionService;
 
   protected ArcService(DiscordSocketClient clientInstance, InteractionService interactionService, string serviceName) 
   {
 
-    _clientInstance = clientInstance;
-    _interactionService = interactionService;
+    ClientInstance = clientInstance;
+    InteractionService = interactionService;
 
     Console.WriteLine("LOADED SERVICE: " + serviceName);
     

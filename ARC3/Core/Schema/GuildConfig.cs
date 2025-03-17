@@ -1,9 +1,10 @@
+using Arc3.Core.Schema.Commons;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Arc3.Core.Schema;
 
-public class GuildConfig {
+public class GuildConfig : IStoresGuild {
 
   [BsonId]
   [BsonRepresentation(BsonType.String)]

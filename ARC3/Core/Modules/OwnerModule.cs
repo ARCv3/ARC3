@@ -35,7 +35,7 @@ public class OwnerModule : ArcModule {
    RequireUserPermission(GuildPermission.Administrator)]
   public async Task StatusCommand(string name, string url = null, ActivityType type = ActivityType.CustomStatus)
   {
-    await _clientInstance.SetGameAsync(name, url, type);
+    await ClientInstance.SetGameAsync(name, url, type);
     await Context.Interaction.RespondAsync("Changed!", ephemeral:true);
   }
 
@@ -44,7 +44,7 @@ public class OwnerModule : ArcModule {
   {
 
       var guild = await DbService.GetItemsAsync<GuildInfo>("Guilds");
-      var self = guild.First(x => x.GuildSnowflake == Context.Guild.Id.ToString());
+      var self = guild.First(x => x.GuildSnowflake == (long)Context.Guild.Id);
       await DbService.UpdatePremium(self.GuildSnowflake, !self.Premium);
       if (self.Premium)
       {

@@ -279,7 +279,7 @@ public class DbService : ArcService {
 
   }
 
-  public async Task UpdatePremium(string guild, bool premium)
+  public async Task UpdatePremium(long guild, bool premium)
   {
     var collection = GetCollection<GuildInfo>("Guilds");
     var filter = Builders<GuildInfo>.Filter.Where(x => x.GuildSnowflake == guild);
@@ -287,7 +287,7 @@ public class DbService : ArcService {
     await collection.UpdateOneAsync(filter, upd);
   }
 
-  public async Task UpdateModList(string guild, List<string> mods) {
+  public async Task UpdateModList(long guild, List<string> mods) {
     var collection = GetCollection<GuildInfo>("Guilds");
     var filter = Builders<GuildInfo>.Filter.Where(x => x.GuildSnowflake == guild);
     var upd = Builders<GuildInfo>.Update.Set(x => x.Moderators, mods);

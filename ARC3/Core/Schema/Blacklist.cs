@@ -1,9 +1,10 @@
+using Arc3.Core.Schema.Commons;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Arc3.Core.Schema;
 
-public class Blacklist
+public class Blacklist : IStoresGuild, IStoresUser
 {
 
   [BsonId]

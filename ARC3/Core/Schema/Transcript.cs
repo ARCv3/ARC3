@@ -1,10 +1,11 @@
 
+using Arc3.Core.Schema.Commons;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Arc3.Core.Schema;
 
-public class Transcript {
+public class Transcript : IStoresUser, IStoresGuild {
 
   [BsonId]
   [BsonRepresentation(BsonType.String)]
@@ -14,7 +15,7 @@ public class Transcript {
   public string ModMailId { get; set; }
 
   [BsonElement("sendersnowflake")]
-  public long SenderSnowfake { get; set; }
+  public long UserSnowflake { get; set; }
 
   [BsonElement("attachments")]
   public string[] AttachmentURls { get; set; }

@@ -5,6 +5,9 @@ using MongoDB.Driver;
 
 namespace Arc3.Core.Services;
 
+/**
+ * WORK IN PROGRESS
+ */
 public class AppealsService : ArcService {
   
   private readonly DbService _dbService;
@@ -36,7 +39,7 @@ public class AppealsService : ArcService {
         var appealChannel = _dbService.Config[ulong.Parse(Environment.GetEnvironmentVariable("GUILD_ID") ?? string.Empty)]["appealChannel"];
         
         // Fetch the channel 
-        var channel = _clientInstance.GetChannelAsync(ulong.Parse(appealChannel));
+        var channel = ClientInstance.GetChannelAsync(ulong.Parse(appealChannel));
 
         while (!channel.IsCompleted) ;
 

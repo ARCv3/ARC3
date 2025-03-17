@@ -198,7 +198,7 @@ public class PaginationService : ArcService
   }
 
     public async Task CreatePaginationResponse(List<Page> pages, SocketMessageComponent interactionCtx) {
-      PaginationSession session = new PaginationSession(interactionCtx, pages, _clientInstance)
+      PaginationSession session = new PaginationSession(interactionCtx, pages, ClientInstance)
       {
         DbService = _dbService
       };

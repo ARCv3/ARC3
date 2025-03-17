@@ -18,7 +18,7 @@ public class RequirePremiumAttribute : PreconditionAttribute
 
         var dbService = services.GetRequiredService<DbService>();
         var guildInfos = await dbService.GetItemsAsync<GuildInfo>("Guilds");
-        var guildSnowflake = context.Guild.Id.ToString();
+        var guildSnowflake = (long)context.Guild.Id;
         var config = guildInfos.First(x => x.GuildSnowflake == guildSnowflake);
 
         if (config.Premium)

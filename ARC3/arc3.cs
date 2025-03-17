@@ -113,7 +113,7 @@ internal class Arc3
       var stat = new CommandStat()
       {
         Id = Guid.NewGuid().ToString(),
-        GuildID = arg.GuildId.ToString(),
+        GuildSnowflake = (long)arg.GuildId!,
         Name = interaction.Name,
         Args = data
       };
@@ -208,13 +208,13 @@ internal class Arc3
   private async Task NewGuild(IEnumerable<GuildInfo> guildinfos, SocketGuild guild, DbService db)
   {
     // Guard if guild info already exists
-    if (guildinfos.Any(x => x.GuildSnowflake == guild.Id.ToString()))
+    if (guildinfos.Any(x => x.GuildSnowflake == (long)guild.Id))
       return;
 
     // Send the guild info
     await db.AddAsync<GuildInfo>(new GuildInfo()
     {
-      GuildSnowflake = guild.Id.ToString(),
+      GuildSnowflake = (long)guild.Id,
       Premium = false,
       Moderators = new List<string>(),
       OwnerId = (long)guild.OwnerId
