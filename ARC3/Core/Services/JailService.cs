@@ -35,7 +35,7 @@ public class JailService : ArcService {
       // give them the jailed role and make sure the channel has allowed them.
       
       // Get some needed vars 
-      var channel = await jail.GetChannel(_clientInstance);
+      var channel = await jail.GetChannel(ClientInstance);
       var user = arg;
       var guildConfig = _dbService.Config[user.Guild.Id];
       var guild = arg.Guild;
@@ -69,13 +69,13 @@ public class JailService : ArcService {
     }
 
     var jail = jails.First(x => x.ChannelSnowflake == (long)arg.Channel.Id);
-    var channel = await jail.GetChannel(_clientInstance);
+    var channel = await jail.GetChannel(ClientInstance);
   
     var transcript = new Transcript
     {
       Id = arg.Id.ToString(),
       ModMailId = jail.Id,
-      SenderSnowfake = (long)arg.Author.Id,
+      UserSnowflake = (long)arg.Author.Id,
       AttachmentURls = arg.Attachments.Select(x => x.ProxyUrl).ToArray(),
       CreatedAt = arg.CreatedAt.UtcDateTime,
       GuildSnowflake = (long)channel.GuildId,

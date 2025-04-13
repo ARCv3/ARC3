@@ -1,9 +1,10 @@
+using Arc3.Core.Schema.Commons;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Arc3.Core.Schema;
 
-public class ModMail {
+public class ModMail : IStoresUser, IStoresChannel {
 
   [BsonId]
   [BsonRepresentation(BsonType.String)]

@@ -32,7 +32,7 @@ public class KaraokeService : ArcService {
       _dbService = dbService;
       
       ChannelCache = new DefaultDict<ulong, ChannelStatus>(new ChannelStatus());
-      _clientInstance.UserVoiceStateUpdated += ClientInstanceOnUserVoiceStateUpdated;
+      ClientInstance.UserVoiceStateUpdated += ClientInstanceOnUserVoiceStateUpdated;
   }
 
   private Task ClientInstanceOnUserVoiceStateUpdated(SocketUser user, SocketVoiceState before, SocketVoiceState after)

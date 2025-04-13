@@ -6,14 +6,14 @@ namespace Arc3.Core.Modules;
 
 public abstract class ArcModule : InteractionModuleBase<SocketInteractionContext> {
 
-  private static Dictionary<string, bool> _loadedDict = new Dictionary<string, bool>();
-  protected readonly DiscordSocketClient _clientInstance;
+  private static readonly Dictionary<string, bool> LoadedDict = new Dictionary<string, bool>();
+  protected readonly DiscordSocketClient ClientInstance;
 
-  public ArcModule(DiscordSocketClient clientInstance, string moduleName) {
+  protected ArcModule(DiscordSocketClient clientInstance, string moduleName) {
 
-    var loaded = _loadedDict.ContainsKey(moduleName);
+    var loaded = LoadedDict.ContainsKey(moduleName);
 
-    _clientInstance = clientInstance;
+    ClientInstance = clientInstance;
     
     if (loaded)
       return;
@@ -21,7 +21,7 @@ public abstract class ArcModule : InteractionModuleBase<SocketInteractionContext
     RegisterListeners(); 
 
     Console.WriteLine($"MODULE LOADED: {moduleName}");
-    _loadedDict[moduleName] = true;
+    LoadedDict[moduleName] = true;
     
   }
 

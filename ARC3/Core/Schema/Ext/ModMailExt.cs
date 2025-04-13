@@ -174,7 +174,7 @@ public static class ModMailExt
         {
             Id = msg.Id.ToString(),
             ModMailId = self.Id,
-            SenderSnowfake = (long)msg.Author.Id,
+            UserSnowflake = (long)msg.Author.Id,
             AttachmentURls = msg.Attachments.Select(x => x.ProxyUrl).ToArray(),
             CreatedAt = msg.CreatedAt.UtcDateTime,
             GuildSnowflake = (long)channel.Guild.Id,

@@ -10,11 +10,11 @@ using Discord.WebSocket;
 
 namespace Arc3.Core.Modules;
 
-[RequireCommandBlacklist, RequirePremium]
+[RequireCommandBlacklist, RequirePremium, Obsolete("Karaoke Module is buggy and unused.")]
 public class KaraokeModule : ArcModule {
 
-  public DbService DbService { get; set ; }
-  public KaraokeService KaraokeService { get; set; }
+  public required DbService DbService { get; set ; }
+  public required KaraokeService KaraokeService { get; set; }
 
   public KaraokeModule(DiscordSocketClient clientInstance) : base(clientInstance, "Karaoke") {
 
@@ -44,7 +44,7 @@ public class KaraokeModule : ArcModule {
 
     description += $"\n**Admin User: ** <@{KaraokeService.ChannelCache[guildUser.VoiceChannel.Id].AdminSnowflake}>";
 
-    var embed = new EmbedBuilder().WithModMailStyle(_clientInstance, "Karaoke");
+    var embed = new EmbedBuilder().WithModMailStyle(ClientInstance, "Karaoke");
     embed.WithTitle($"Queue for {guildUser.VoiceChannel.Name}");
     embed.WithDescription(description);
 
@@ -68,7 +68,6 @@ public class KaraokeModule : ArcModule {
     });
 
     await Context.Interaction.RespondAsync($"You are in position #{rank}.");
-
 
   }
 

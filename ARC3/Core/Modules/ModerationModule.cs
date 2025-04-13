@@ -27,8 +27,8 @@ public class ModerationModule : ArcModule
   public override void RegisterListeners()
   {
     // Register listeners
-    _clientInstance.ButtonExecuted += ButtonInteractionCreated;
-    _clientInstance.ModalSubmitted += ClientInstanceOnModalSubmitted;
+    ClientInstance.ButtonExecuted += ButtonInteractionCreated;
+    ClientInstance.ModalSubmitted += ClientInstanceOnModalSubmitted;
   }
 
   private async Task ClientInstanceOnModalSubmitted(SocketModal arg)
@@ -71,7 +71,7 @@ public class ModerationModule : ArcModule
   private async Task AddUserNote(SocketMessageComponent ctx) {
 
     ulong userId = ulong.Parse(ctx.Data.CustomId.Split('.')[1]);
-    var user = await _clientInstance.GetUserAsync(userId);
+    var user = await ClientInstance.GetUserAsync(userId);
 
     var modal = new ModalBuilder()
       .WithTitle($"Add note to {user.Username}")
@@ -100,7 +100,7 @@ public class ModerationModule : ArcModule
     
     List<Page> pages =  new List<Page>();
     foreach (var note in notes) {
-      var embed = note.CreateEmbed(_clientInstance);
+      var embed = note.CreateEmbed(ClientInstance);
       var page = new Page(embed:embed);
       var comp = new ActionRowBuilder()
         .WithButton(new ButtonBuilder()
@@ -180,7 +180,7 @@ public class ModerationModule : ArcModule
     
     // Create your jail and initialize it.
     var jail = new Jail();
-    await jail.InitAsync(_clientInstance, Context.Guild, user, DbService, Context.User);
+    await jail.InitAsync(ClientInstance, Context.Guild, user, DbService, Context.User);
     
     // Send feedback.
     await ctx.FollowupAsync($"{user.Mention} was jailed!", ephemeral: true);
@@ -211,7 +211,7 @@ public class ModerationModule : ArcModule
     var jail = jails.First(x => x.UserSnowflake == (long)user.Id);
 
     // Get the jail channel
-    var channel = await jail.GetChannel(_clientInstance);
+    var channel = await jail.GetChannel(ClientInstance);
 
     // remove the user's permission to speak
     var perm =  new OverwritePermissions(sendMessages: PermValue.Allow, viewChannel: PermValue.Allow, useApplicationCommands: PermValue.Deny);
@@ -245,7 +245,7 @@ public class ModerationModule : ArcModule
     var jail = jails.First(x => x.UserSnowflake == (long)user.Id);
 
     // Get the jail channel
-    var channel = await jail.GetChannel(_clientInstance);
+    var channel = await jail.GetChannel(ClientInstance);
 
     // remove the user's permission to speak
     var perm =  new OverwritePermissions(sendMessages: PermValue.Deny, viewChannel: PermValue.Allow, useApplicationCommands: PermValue.Deny);
@@ -279,7 +279,7 @@ public class ModerationModule : ArcModule
     
     // Delete the jail
     var jail = jails.First(x => x.UserSnowflake == (long)user.Id);
-    await jail.DestroyAsync(_clientInstance, DbService);
+    await jail.DestroyAsync(ClientInstance, DbService);
     
     try
     {
@@ -309,9 +309,9 @@ public class ModerationModule : ArcModule
 
     var mail = mails.First(x => (ulong)x.ChannelSnowflake == Context.Channel.Id);
 
-    var embed = new EmbedBuilder().WithModMailStyle(_clientInstance);
-    var channel = await mail.GetChannel(_clientInstance);
-    var user = await mail.GetUser(_clientInstance);
+    var embed = new EmbedBuilder().WithModMailStyle(ClientInstance);
+    var channel = await mail.GetChannel(ClientInstance);
+    var user = await mail.GetUser(ClientInstance);
 
     var candm = true;
     IUserMessage msg = null;
@@ -354,11 +354,11 @@ public class ModerationModule : ArcModule
 
     try
     {
-      await mail.CloseAsync(_clientInstance, DbService);
+      await mail.CloseAsync(ClientInstance, DbService);
     }
     catch (Exception ex)
     {
-      var chan = await mail.GetChannel(clientInstance: _clientInstance);
+      var chan = await mail.GetChannel(clientInstance: ClientInstance);
       await DbService.RemoveModMail(mail.Id);
       await chan.DeleteAsync();
     }

@@ -34,7 +34,7 @@ public class UtilityModule : ArcModule {
   }
 
   public override void RegisterListeners() {
-    _clientInstance.SelectMenuExecuted += OnInteractionCreated;
+    ClientInstance.SelectMenuExecuted += OnInteractionCreated;
   }
 
   private async Task OnInteractionCreated(SocketMessageComponent interaction) {
@@ -45,7 +45,7 @@ public class UtilityModule : ArcModule {
       return;
 
     string response = "w";
-    var guild = _clientInstance.GetGuild(interaction.GuildId?? 0);
+    var guild = ClientInstance.GetGuild(interaction.GuildId?? 0);
     var user = guild.GetUser(ulong.Parse(data.Values.First().Split('.')[1]));
 
     if (data.Values.First().Split('.')[0] == "global") {
@@ -109,8 +109,8 @@ public class UtilityModule : ArcModule {
     
     var embed = new EmbedBuilder()
       .WithAuthor(new EmbedAuthorBuilder()
-        .WithName(_clientInstance.CurrentUser.Username)
-        .WithIconUrl(_clientInstance.CurrentUser.GetAvatarUrl(ImageFormat.Auto)))
+        .WithName(ClientInstance.CurrentUser.Username)
+        .WithIconUrl(ClientInstance.CurrentUser.GetAvatarUrl(ImageFormat.Auto)))
       .WithColor(Color.DarkBlue)
       .WithDescription($"**{uptimeMsg}:** ``{uptime.Days}{uptimeDays} {uptime.Hours}{uptimeHours} {uptime.Minutes}{uptimeMinutes} {uptime.Seconds}{uptimeSeconds}``")
       .Build();
@@ -203,7 +203,7 @@ public class UtilityModule : ArcModule {
         Type = "config",
         Date = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
         Tagline = "Config value was changed",
-        GuildID = Context.Guild.Id.ToString(),
+        GuildSnowflake = (long)Context.Guild.Id,
         Data = data,
         Url = ""
       }; 
@@ -334,7 +334,7 @@ public class UtilityModule : ArcModule {
   ) {
     var ctx = Context.Interaction;
     var blacklists = await DbService.GetItemsAsync<Blacklist>("blacklist");
-    var user = await _clientInstance.GetUserAsync(ulong.Parse(id));
+    var user = await ClientInstance.GetUserAsync(ulong.Parse(id));
 
     // Guard if the user is already blacklisted.
     if (blacklists.Any(x => x.GuildSnowflake == ((long)Context.Guild.Id) &&  x.UserSnowflake == long.Parse(id) && (x.Command == "all" || x.Command == cmd)) ) {
@@ -411,7 +411,7 @@ public class UtilityModule : ArcModule {
 
     var ctx = Context.Interaction;
     var blacklists = await DbService.GetItemsAsync<Blacklist>("blacklist");
-    var user = await _clientInstance.GetUserAsync(ulong.Parse(id));
+    var user = await ClientInstance.GetUserAsync(ulong.Parse(id));
 
     // Guard if the user is already blacklisted.
     if (blacklists.Any(x => x.GuildSnowflake == ((long)Context.Guild.Id) &&  x.UserSnowflake == (long)user.Id && (x.Command == "all" || x.Command == cmd)) ) {
@@ -473,7 +473,7 @@ public class UtilityModule : ArcModule {
   [SlashCommand("whitelist", "add a user to the mod whitelist"), RequireUserPermission(GuildPermission.Administrator)]
   public async Task WhiteListCommand(SocketUser user) {
     var guild = await DbService.GetItemsAsync<GuildInfo>("Guilds");
-    var self = guild.First(x => x.GuildSnowflake == Context.Guild.Id.ToString());
+    var self = guild.First(x => x.GuildSnowflake == (long)Context.Guild.Id);
     var mods = self.Moderators;
 
     if (mods.Contains(user.Id.ToString())) {
@@ -484,7 +484,7 @@ public class UtilityModule : ArcModule {
       await Context.Interaction.RespondAsync("User was whitelisted");
     }
 
-    await DbService.UpdateModList(Context.Guild.Id.ToString(), mods);
+    await DbService.UpdateModList((long)Context.Guild.Id, mods);
 
   }
   
