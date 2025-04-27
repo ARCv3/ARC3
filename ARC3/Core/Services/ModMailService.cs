@@ -39,7 +39,7 @@ public class ModMailService : ArcService
         }
     }
 
-    private async Task ClientInstanceOnMessageReceived(SocketMessage arg)
+    public async Task ClientInstanceOnMessageReceived(SocketMessage arg)
     {
 
         /*
@@ -59,7 +59,7 @@ public class ModMailService : ArcService
         await ProcessModmailMessageRecieved(arg);
     }
 
-    private async Task ClientInstanceOnUserIsTyping(Cacheable<IUser, ulong> typingUser, Cacheable<IMessageChannel, ulong> channel)
+    public async Task ClientInstanceOnUserIsTyping(Cacheable<IUser, ulong> typingUser, Cacheable<IMessageChannel, ulong> channel)
     {
 
         if (typingUser.Id == ClientInstance.CurrentUser.Id)
@@ -165,7 +165,7 @@ public class ModMailService : ArcService
         }
     }
 
-    private async Task ModalInteractionCreated(SocketModal ctx) {
+    public async Task ModalInteractionCreated(SocketModal ctx) {
         
         var eventId = ctx.Data.CustomId;
 
