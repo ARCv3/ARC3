@@ -59,6 +59,7 @@ public class ModMailService : ArcService
         await ProcessModmailMessageRecieved(arg);
     }
 
+
     public async Task ClientInstanceOnUserIsTyping(Cacheable<IUser, ulong> typingUser, Cacheable<IMessageChannel, ulong> channel)
     {
 
