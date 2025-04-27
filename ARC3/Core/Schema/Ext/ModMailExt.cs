@@ -46,7 +46,7 @@ public static class ModMailExt
         
         var attLen = msg.Attachments.Count;
         // Send the message
-        if (!string.IsNullOrWhiteSpace(msg.Content) && attLen < 0)
+        if (!string.IsNullOrWhiteSpace(msg.Content) && attLen <= 0)
         {
             try
             {
@@ -73,7 +73,7 @@ public static class ModMailExt
             
         
         // Share attachments
-        if (msg.Attachments.Count > 0)
+        if (attLen > 0)
         {
 
             var attCount = 0;

@@ -4,7 +4,7 @@
         {
             "name": "arc",
             "image": "140023379914.dkr.ecr.us-east-2.amazonaws.com/arc-api-repo",
-            "cpu": 256,
+            "cpu": 512,
             "memory": 512,
             "portMappings": [],
             "essential": true,
