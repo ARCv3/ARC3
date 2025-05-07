@@ -523,7 +523,7 @@ public class ModMailService : ArcService
                 GuildSnowflake = (long)guild.Id,
                 Tagline = "Modmail has high activity",
                 Type = "modmail",
-                Url = $"/{guild.Id}/transcripts/{mail.Id}"
+                Url = $"/dashboard/transcripts/{mail.Id}"
             };
 
             await _dbService.AddAsync(newInsight, "Insights");
@@ -578,7 +578,7 @@ public class ModMailService : ArcService
         var embed = new EmbedBuilder()
             .WithModMailStyle(ClientInstance)
             .WithTitle("Modmail Transcript")
-            .WithDescription($"**Modmail with:** {user.Mention}\n**Saved** <t:{DateTimeOffset.Now.ToUnixTimeSeconds()}:R> **by** {s.Mention}\n\n[Transcript]({hostedUrl}/{guild.Id}/transcripts/{m.Id})")
+            .WithDescription($"**Modmail with:** {user.Mention}\n**Saved** <t:{DateTimeOffset.Now.ToUnixTimeSeconds()}:R> **by** {s.Mention}\n\n[Transcript]({hostedUrl}/api/public/transcripts/{guild.Id}/{m.Id})")
             .Build();
 
         await ((SocketTextChannel)transcriptchannel).SendMessageAsync(embed: embed);
