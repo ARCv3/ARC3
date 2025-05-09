@@ -34,7 +34,7 @@ public class ModerationModule : ArcModule
   private async Task ClientInstanceOnModalSubmitted(SocketModal arg)
   {
     
-    // await arg.DeferAsync();
+    await arg.DeferAsync();
     
     if (arg.Data.CustomId.StartsWith("addnote"))
     {
@@ -53,7 +53,7 @@ public class ModerationModule : ArcModule
         UserSnowflake = (long)userSnowflake
       });
 
-      await arg.RespondAsync("User note was added!", ephemeral: true);
+      await author.SendMessageAsync($"Added note to {userSnowflake}:\n{content}");
 
     }
   }
