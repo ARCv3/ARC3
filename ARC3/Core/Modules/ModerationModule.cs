@@ -135,17 +135,17 @@ public class ModerationModule : ArcModule
     var components = new ComponentBuilder()
       .WithRows(new List<ActionRowBuilder>() {
         new ActionRowBuilder()
-          .WithComponents(new List<IMessageComponent>() {
+          .WithComponents(new List<IMessageComponentBuilder>() {
             new ButtonBuilder()
               .WithStyle(ButtonStyle.Primary)
               .WithCustomId($"addnote.{ctx.Data.Member.Id}")
               .WithLabel("Add Note")
-              .WithEmote(new Emoji("📝")).Build(),
+              .WithEmote(new Emoji("📝")),
             new ButtonBuilder()
               .WithStyle(ButtonStyle.Primary)
               .WithCustomId($"viewnotes.{ctx.Data.Member.Id}")
               .WithLabel($"View {notes.Count} Note(s)")
-              .WithEmote(new Emoji("📜")).Build()
+              .WithEmote(new Emoji("📜"))
           })
       })
       .Build();

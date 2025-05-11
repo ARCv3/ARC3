@@ -54,26 +54,26 @@ public class PaginationSession {
 
   private ActionRowBuilder _paginationButtons =>
     new ActionRowBuilder()
-      .WithComponents(new List<IMessageComponent>()
+      .WithComponents(new List<IMessageComponentBuilder>()
       {
         new ButtonBuilder()
           .WithStyle(ButtonStyle.Primary)
           .WithCustomId("pagination.previous")
           .WithLabel(" ")
           .WithEmote(PaginationEmojis.Left)
-          .WithDisabled(!(_pages.Count > 1)).Build(),
+          .WithDisabled(!(_pages.Count > 1)),
         new ButtonBuilder()
           .WithStyle(ButtonStyle.Primary)
           .WithCustomId("pagination.stop")
           .WithLabel(" ")
           .WithEmote(PaginationEmojis.Stop)
-          .WithDisabled(false).Build(),
+          .WithDisabled(false),
         new ButtonBuilder()
           .WithStyle(ButtonStyle.Primary)
           .WithCustomId("pagination.next")
           .WithLabel(" ")
           .WithEmote(PaginationEmojis.Right)
-          .WithDisabled(!(_pages.Count > 1)).Build()
+          .WithDisabled(!(_pages.Count > 1))
       });
 
   public PaginationSession(SocketMessageComponent interactionContext, List<Page> pages, DiscordSocketClient clientInstance) {
@@ -162,27 +162,7 @@ public class PaginationSession {
         break;
     }
 
-    if (ctx.Data.CustomId.Contains("delete")) {
-
-      var currentPage = _pages[_pageIndex];
-      var comp = currentPage.Components.First(
-        // Get the first row that has any component taht is a delete component.
-        x => x.Components.Any(x=> x.CustomId.Contains("delete"))
-      );
-      
-      currentPage.Components.Remove(comp);
-      currentPage.Embed = new EmbedBuilder().WithDescription("```Deleted```").Build();
-       
-      // Delete the note
-      // Console.WriteLine(comp.Components.First().CustomId);
-      await DbService.RemoveUserNote(comp.Components.First().CustomId.Split('.')[2]);
-      
-      await Update();
-
-    }
-
   }
-  
   
 }
 
