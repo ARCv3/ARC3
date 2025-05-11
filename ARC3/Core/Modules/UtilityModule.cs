@@ -164,7 +164,7 @@ public class UtilityModule : ArcModule {
           .WithDescription("Get the user's server avatar")
           .WithDefault(false)
           .WithValue($"server.{user.Id}.{Context.User.Id}")
-    }).Build();
+    });
     
     await Context.Interaction.RespondAsync(
       text: user.GetAvatarUrl(ImageFormat.Auto, 2048),

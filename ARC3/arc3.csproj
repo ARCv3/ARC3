@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Discord.NET" Version="3.16.0" />
+    <PackageReference Include="Discord.NET" Version="3.18.0-beta.2" />
     <PackageReference Include="dotenv.net" Version="3.2.1" />
     <PackageReference Include="microsoft.extensions.dependencyinjection" Version="9.0.0-rc.2.24473.5" />
     <PackageReference Include="Mongodb.Driver" Version="2.29.0" />

@@ -35,7 +35,9 @@ internal class Arc3
 
     var config = new DiscordSocketConfig {
       GatewayIntents = (Discord.GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent),
-      LogLevel = Discord.LogSeverity.Debug
+      LogLevel = Discord.LogSeverity.Debug,
+      TotalShards = int.Parse( Environment.GetEnvironmentVariable("SHARDS") ?? "0") ,
+      ShardId = int.Parse( Environment.GetEnvironmentVariable("SHARD_ID") ?? "0")
     };
 
     // Create a new instance of the socket client
@@ -192,6 +194,8 @@ internal class Arc3
       }
 
       Console.WriteLine($"\nLogged in as {_client.CurrentUser.Username}\n" +
+                        $"Shard ID: {_client.ShardId}\n" +
+                        $"Recommended Shards: {await _client.GetRecommendedShardCountAsync()}\n" +
                         $"Registered {_interactions.SlashCommands.Count} slash commands\n" +
                         $"Bot is a member of {_client.Guilds.Count} guilds\n");
 
